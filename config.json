@@ -4,13 +4,15 @@
             "endpoint": "https://api.example.com/v1/chat/completions",
             "bearer_token": "your_bearer_token_here",
             "model_name": "model_1",
-            "temperature": 0.7
+            "temperature": 0.7,
+            "max_retries": 3
         },
         {
             "endpoint": "https://api.example.com/v1/chat/completions",
             "bearer_token": "your_bearer_token_here",
             "model_name": "model_2",
-            "temperature": 0.5
+            "temperature": 0.5,
+            "max_retries": 3
         }
     ],
     "summary_model": {

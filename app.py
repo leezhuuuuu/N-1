@@ -3,6 +3,7 @@ import requests
 import json
 import threading
 from flask_sse import sse
+import time
 
 app = Flask(__name__)
 app.config["REDIS_URL"] = "redis://localhost"
@@ -20,24 +21,37 @@ def request_model(model_config, messages):
     payload = {
         "model": model_config['model_name'],
         "messages": messages,
-        "stream": False,  # 修改为False以禁用流式输出
+        "stream": False,
         "temperature": model_config.get('temperature', 0.7)
     }
-    response = requests.post(model_config['endpoint'], headers=headers, json=payload)
-    return response
+    
+    max_retries = model_config.get('max_retries', 3)
+    for attempt in range(max_retries):
+        try:
+            response = requests.post(model_config['endpoint'], headers=headers, json=payload, timeout=30)
+            response.raise_for_status()
+            return response
+        except (requests.RequestException, requests.Timeout) as e:
+            if attempt == max_retries - 1:
+                print(f"Error requesting model {model_config['model_name']} after {max_retries} attempts: {e}")
+                return None
+            time.sleep(1)  # 在重试之前等待1秒
+
+    return None
 
 @app.route('/v1/chat/completions', methods=['POST'])
 def chat_completions():
     data = request.json
     messages = data['messages']
-    stream = data.get('stream', False)  # 获取请求中的stream参数
+    stream = data.get('stream', False)
     
     threads = []
     results = []
     
     def fetch_model_response(model_config):
         result = request_model(model_config, messages)
-        results.append(result)
+        if result is not None:
+            results.append(result)
     
     # 并行请求多个模型
     for model_config in config['models']:
@@ -75,24 +89,35 @@ def chat_completions():
     summary_payload = {
         "model": summary_model_config['model_name'],
         "messages": [{"role": "user", "content": summary_input}],
-        "stream": stream,  # 使用请求中的stream参数
+        "stream": stream,
         "temperature": summary_model_config.get('temperature', 0.7)
     }
     
     if stream:
         # 流式输出总结结果
         def generate():
-            response = requests.post(summary_model_config['endpoint'], headers=summary_headers, json=summary_payload, stream=True)
-            for line in response.iter_lines():
-                if line:
-                    yield f"data: {line.decode('utf-8')}\n\n"
-            yield "data: [DONE]\n\n"
+            try:
+                response = requests.post(summary_model_config['endpoint'], headers=summary_headers, json=summary_payload, stream=True, timeout=30)
+                response.raise_for_status()
+                for line in response.iter_lines():
+                    if line:
+                        yield f"data: {line.decode('utf-8')}\n\n"
+                yield "data: [DONE]\n\n"
+            except (requests.RequestException, requests.Timeout) as e:
+                print(f"Error in streaming summary: {e}")
+                yield f"data: {{\"error\": \"Summary generation failed: {str(e)}\"}}\n\n"
+                yield "data: [DONE]\n\n"
         
         return Response(generate(), content_type='text/event-stream')
     else:
         # 非流式输出
-        response = requests.post(summary_model_config['endpoint'], headers=summary_headers, json=summary_payload)
-        return response.json()
+        try:
+            response = requests.post(summary_model_config['endpoint'], headers=summary_headers, json=summary_payload, timeout=30)
+            response.raise_for_status()
+            return response.json()
+        except (requests.RequestException, requests.Timeout) as e:
+            print(f"Error in non-streaming summary: {e}")
+            return {"error": f"Summary generation failed: {str(e)}"}, 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8888)
