@@ -9,7 +9,7 @@ app.config["REDIS_URL"] = "redis://localhost"
 app.register_blueprint(sse, url_prefix='/stream')
 
 # 加载配置文件
-with open('config.json') as f:
+with open('config.json', 'r', encoding='utf-8') as f:
     config = json.load(f)
 
 def request_model(model_config, messages):
@@ -60,6 +60,9 @@ def chat_completions():
     
     user_question = messages[-1]['content']
     combined_content.append(f"用户的问题是：{user_question}")
+    
+    # 添加总结提示词
+    combined_content.append(config['summary_model']['summary_prompt'])
     
     summary_input = "\n".join(combined_content)
     

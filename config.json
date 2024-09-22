@@ -1,22 +1,23 @@
 {
     "models": [
         {
-            "endpoint": "https://a.ltcld.cn/v1/chat/completions",
-            "bearer_token": "sk-8AFAcbnmJg10UCNM59C6C72a9d0347F0B18f61D5Dc9b58B3",
-            "model_name": "01-ai/Yi-1.5-6B-Chat",
+            "endpoint": "https://api.example.com/v1/chat/completions",
+            "bearer_token": "your_bearer_token_here",
+            "model_name": "model_1",
             "temperature": 0.7
         },
         {
-            "endpoint": "https://a.ltcld.cn/v1/chat/completions",
-            "bearer_token": "sk-8AFAcbnmJg10UCNM59C6C72a9d0347F0B18f61D5Dc9b58B3",
-            "model_name": "THUDM/glm-4-9b-chat",
+            "endpoint": "https://api.example.com/v1/chat/completions",
+            "bearer_token": "your_bearer_token_here",
+            "model_name": "model_2",
             "temperature": 0.5
         }
     ],
     "summary_model": {
-        "endpoint": "https://a.ltcld.cn/v1/chat/completions",
-        "bearer_token": "sk-8AFAcbnmJg10UCNM59C6C72a9d0347F0B18f61D5Dc9b58B3",
-        "model_name": "Qwen/Qwen2.5-7B-Instruct",
-        "temperature": 0.7
+        "endpoint": "https://api.example.com/v1/chat/completions",
+        "bearer_token": "your_bearer_token_here",
+        "model_name": "summary_model",
+        "temperature": 0.7,
+        "summary_prompt": "请根据以上多个模型的回答，综合分析并给出一个全面、准确的回答。注意要考虑到所有模型的观点，并给出一个平衡的总结。"
     }
 }
