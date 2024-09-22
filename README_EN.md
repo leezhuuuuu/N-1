@@ -1,5 +1,7 @@
 # N-1: Multi-Model Chat Completion API 🚀
 
+[English](README_EN.md) | [中文](README.md)
+
 [![](https://img.shields.io/github/license/leezhuuuuu/N-1.svg)](LICENSE)
 ![](https://img.shields.io/github/stars/leezhuuuuu/N-1.svg)
 ![](https://img.shields.io/github/forks/leezhuuuuu/N-1.svg)
