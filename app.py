@@ -1,4 +1,4 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, jsonify
 import requests
 import json
 import threading
@@ -12,6 +12,11 @@ app.register_blueprint(sse, url_prefix='/stream')
 # 加载配置文件
 with open('config.json', 'r', encoding='utf-8') as f:
     config = json.load(f)
+
+API_BEARER_TOKEN = config.get('api_bearer_token')
+
+def verify_token(token):
+    return token == API_BEARER_TOKEN
 
 def request_model(model_config, messages):
     headers = {
@@ -41,6 +46,15 @@ def request_model(model_config, messages):
 
 @app.route('/v1/chat/completions', methods=['POST'])
 def chat_completions():
+    # 验证 bearer token
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return jsonify({"error": "未提供有效的 bearer token"}), 401
+    
+    token = auth_header.split(' ')[1]
+    if not verify_token(token):
+        return jsonify({"error": "无效的 bearer token"}), 401
+
     data = request.json
     messages = data['messages']
     stream = data.get('stream', False)

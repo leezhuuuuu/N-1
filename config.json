@@ -1,24 +1,25 @@
 {
+    "api_bearer_token": "您的API令牌",
     "models": [
         {
             "endpoint": "https://api.example.com/v1/chat/completions",
-            "bearer_token": "your_bearer_token_here",
-            "model_name": "model_1",
+            "bearer_token": "模型1的访问令牌",
+            "model_name": "模型1名称",
             "temperature": 0.7,
             "max_retries": 3
         },
         {
             "endpoint": "https://api.example.com/v1/chat/completions",
-            "bearer_token": "your_bearer_token_here",
-            "model_name": "model_2",
+            "bearer_token": "模型2的访问令牌",
+            "model_name": "模型2名称",
             "temperature": 0.5,
             "max_retries": 3
         }
     ],
     "summary_model": {
         "endpoint": "https://api.example.com/v1/chat/completions",
-        "bearer_token": "your_bearer_token_here",
-        "model_name": "summary_model",
+        "bearer_token": "摘要模型的访问令牌",
+        "model_name": "摘要模型名称",
         "temperature": 0.7,
         "summary_prompt": "请根据以上多个模型的回答，综合分析并给出一个全面、准确的回答。注意要考虑到所有模型的观点，并给出一个平衡的总结。"
     }
