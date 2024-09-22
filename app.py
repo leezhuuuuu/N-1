@@ -111,7 +111,7 @@ def chat_completions():
         # 流式输出总结结果
         def generate():
             try:
-                response = requests.post(summary_model_config['endpoint'], headers=summary_headers, json=summary_payload, stream=True, timeout=30)
+                response = requests.post(summary_model_config['endpoint'], headers=summary_headers, json=summary_payload, stream=True, timeout=300)
                 response.raise_for_status()
                 for line in response.iter_lines():
                     if line:
@@ -126,7 +126,7 @@ def chat_completions():
     else:
         # 非流式输出
         try:
-            response = requests.post(summary_model_config['endpoint'], headers=summary_headers, json=summary_payload, timeout=30)
+            response = requests.post(summary_model_config['endpoint'], headers=summary_headers, json=summary_payload, timeout=300)
             response.raise_for_status()
             return response.json()
         except (requests.RequestException, requests.Timeout) as e:
@@ -134,4 +134,4 @@ def chat_completions():
             return {"error": f"Summary generation failed: {str(e)}"}, 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8888)
+    app.run(host='0.0.0.0', port=18888)
