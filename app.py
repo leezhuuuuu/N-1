@@ -4,12 +4,13 @@ import json
 import threading
 import time
 import queue
+import yaml
 
 app = Flask(__name__)
 
 # 加载配置文件
-with open('config.json', 'r', encoding='utf-8') as f:
-    config = json.load(f)
+with open('config.yaml', 'r', encoding='utf-8') as f:
+    config = yaml.safe_load(f)
 
 API_BEARER_TOKEN = config.get('api_bearer_token')
 
