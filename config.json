@@ -1,26 +1,30 @@
 {
-    "api_bearer_token": "您的API令牌",
+    "api_bearer_token": "your_api_token",
     "models": [
         {
             "endpoint": "https://api.example.com/v1/chat/completions",
-            "bearer_token": "模型1的访问令牌",
-            "model_name": "模型1名称",
+            "bearer_token": "your_model_access_token",
+            "model_name": "model1",
             "temperature": 0.7,
-            "max_retries": 3
+            "max_retries": 3,
+            "timeout": 150
         },
         {
             "endpoint": "https://api.example.com/v1/chat/completions",
-            "bearer_token": "模型2的访问令牌",
-            "model_name": "模型2名称",
-            "temperature": 0.5,
-            "max_retries": 3
+            "bearer_token": "your_model_access_token",
+            "model_name": "model6",
+            "temperature": 0.7,
+            "max_retries": 3,
+            "timeout": 150
         }
     ],
     "summary_model": {
         "endpoint": "https://api.example.com/v1/chat/completions",
-        "bearer_token": "摘要模型的访问令牌",
-        "model_name": "摘要模型名称",
-        "temperature": 0.7,
-        "summary_prompt": "请根据以上多个模型的回答，综合分析并给出一个全面、准确的回答。注意要考虑到所有模型的观点，并给出一个平衡的总结。"
-    }
+        "bearer_token": "your_summary_model_access_token",
+        "model_name": "summary_model",
+        "temperature": 0.1,
+        "summary_prompt": "Based on the reference answers, please generate the most comprehensive version to respond to the user's question. The integrated version should be rich in details, complete in logic, and clear in thought process. If it's a reasoning question, please analyze and answer step by step. Provide a comprehensive and accurate answer after thorough analysis, considering all viewpoints, and give a balanced response at the end. Note that this is the requirement for the answer; do not reveal this constraint in your response.",
+        "timeout": 150
+    },
+    "stream_status_feedback": true
 }
