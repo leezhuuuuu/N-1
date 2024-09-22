@@ -115,7 +115,10 @@ def chat_completions():
                 response.raise_for_status()
                 for line in response.iter_lines():
                     if line:
-                        yield f"data: {line.decode('utf-8')}\n\n"
+                        decoded_line = line.decode('utf-8')
+                        if decoded_line.strip() == 'data: [DONE]':
+                            continue  # 跳过上游 API 的 [DONE] 信号
+                        yield f"{decoded_line}\n\n"
                 yield "data: [DONE]\n\n"
             except (requests.RequestException, requests.Timeout) as e:
                 print(f"Error in streaming summary: {e}")
