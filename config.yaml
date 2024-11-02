@@ -1,31 +1,24 @@
-api_bearer_token: your_api_bearer_token_here
+api_bearer_token: your_token_here
 models:
   - endpoint: https://api.example.com/v1/chat/completions
-    bearer_token: your_bearer_token_here
-    model_name: model_1
-    temperature: 0.7
+    bearer_token: your_token_here
+    model_name: model-1
+    temperature: 0.2
     max_retries: 3
-    timeout: 120
+    timeout: 150
   - endpoint: https://api.example.com/v1/chat/completions
-    bearer_token: your_bearer_token_here
-    model_name: model_2
-    temperature: 0.7
+    bearer_token: your_token_here 
+    model_name: model-2
+    temperature: 0.2
     max_retries: 3
-    timeout: 120
-  - endpoint: https://api.example.com/v1/chat/completions
-    bearer_token: your_bearer_token_here
-    model_name: model_3
-    temperature: 0.7
-    max_retries: 3
-    timeout: 120
+    timeout: 150
 summary_model:
   endpoint: https://api.example.com/v1/chat/completions
-  bearer_token: your_bearer_token_here
-  model_name: summary_model
+  bearer_token: your_token_here
+  model_name: summary-model
   temperature: 0.1
+  keep_history: true
   summary_prompt: 请根据参考回答，生成一个最完善的版本来回复用户的问题。要求整合的版本，细节最丰富、逻辑最完整、思路最清晰，如果是问题推理，请逐步分析回答。综合分析并给出一个全面、准确的回答，回答时不要急于先给出答案，请注意要考虑到所有的观点，在最后给出一个平衡的回答。注意这是回答的要求，在你的回答中不要透露此限制。
-  timeout: 120
+  timeout: 150
 stream_status_feedback: true
-
-
-
+debug_mode: true
