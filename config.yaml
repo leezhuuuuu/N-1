@@ -3,7 +3,7 @@ default_combination: "parallel"  # 默认使用的组合名称
 
 # 模型组合配置
 combinations:
-  - name: "parallel"  # 并行分析组合
+  - name: "parallel"  # 并行分析组合，可自行更改名称
     api_bearer_token: YOUR_API_TOKEN
     stream_status_feedback: true
     use_parallel_analysis: true
