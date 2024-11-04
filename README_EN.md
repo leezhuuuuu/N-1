@@ -1,4 +1,4 @@
-# N-1: Multi-Model Combination Chat Completion API 🚀
+# N-1: Multi-Model Composite Chat Completion API 🚀
 
 [English](README_EN.md) | [中文](README.md)
 
@@ -8,7 +8,60 @@
 
 ## Overview 🌟
 
-N-1 is a Flask-based web application that provides a powerful API for handling chat completion requests. The project supports multiple combination modes, allowing you to choose between parallel analysis or direct processing based on your needs. In parallel mode, the system can query multiple large language models simultaneously and use a dedicated summary model to synthesize these responses, providing comprehensive and accurate answers. The project supports both text and visual multimodal processing, making it an ideal tool for AI developers and researchers.
+N-1 is a Flask-based web application that provides powerful API interfaces for handling chat completion requests. The project supports multiple combination modes and allows users to choose between parallel analysis or direct processing modes. In parallel mode, the system can simultaneously query multiple large language models and use dedicated summary models to synthesize these responses, providing comprehensive and accurate answers. The project supports both text and visual multimodal processing, making it an ideal tool for AI developers and researchers.
+
+## Demo API 🎮
+
+You can test using the following Demo API address:
+```
+https://n_1.leez.tech/v1/chat/completions
+```
+
+### Single Model Call Example
+```bash
+curl --location --request POST 'https://n_1.leez.tech/v1/chat/completions' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer ilovelinuxdo' \
+--header 'Accept: */*' \
+--header 'Connection: keep-alive' \
+--data-raw '{
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {"type": "text", "text": "What is in this image?"},
+        {"type": "image_url", "image_url": {"url": "https://global.discourse-cdn.com/openai1/original/4X/f/9/5/f95edd5d0d8848f9322525341bbfc3bf01a48057.png"}}
+      ]
+    }
+  ],
+  "max_tokens": 300,
+  "model": "Qwen2.5-VL-72B",
+  "stream": false
+}'
+```
+
+### Multi-Model Combination Call Example
+```bash
+curl --location --request POST 'https://n_1.leez.tech/v1/chat/completions' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer ilovelinuxdo' \
+--header 'Accept: */*' \
+--header 'Connection: keep-alive' \
+--data-raw '{
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {"type": "text", "text": "What is in this image?"},
+        {"type": "image_url", "image_url": {"url": "https://global.discourse-cdn.com/openai1/original/4X/f/9/5/f95edd5d0d8848f9322525341bbfc3bf01a48057.png"}}
+      ]
+    }
+  ],
+  "max_tokens": 300,
+  "model": "N-1",
+  "stream": false
+}'
+```
 
 ## Tech Stack 🛠️
 
@@ -20,22 +73,22 @@ N-1 is a Flask-based web application that provides a powerful API for handling c
 
 ## Features 🌈
 
-- **Combination Configuration**
-  - Supports multiple preset combination modes
-  - Each combination can independently configure all parameters
-  - Flexible switching of processing modes
+- **Composite Configuration**
+  - Support for multiple preset combination modes
+  - Independent parameter configuration for each combination
+  - Flexible processing mode switching
   
 - **Multi-Model Parallel Analysis**
-  - Simultaneously invoke multiple language models
-  - Supports text and visual processing
-  - Professional summary model to integrate results
+  - Simultaneous calls to multiple language models
+  - Support for text and visual processing
+  - Professional summary model for result integration
 
-- **Visual Processing Capability**
-  - Supports image URLs and base64 formats
+- **Visual Processing Capabilities**
+  - Support for image URLs and base64 format
   - Dedicated visual model processing
   - Configurable image detail levels
 
-- **System Functions**
+- **System Features**
   - Streaming and non-streaming output
   - Bearer Token authentication
   - Error retry mechanism
@@ -43,7 +96,7 @@ N-1 is a Flask-based web application that provides a powerful API for handling c
   - Real-time status feedback
   - Debug mode support
 
-## Environment 🖥️
+## Requirements 🖥️
 
 - Python 3.7+
 
@@ -93,17 +146,17 @@ combinations:
 python app.py
 ```
 
-The service will start at `http://0.0.0.0:18888`.
+The service will start on `http://0.0.0.0:18888`.
 
 ## Usage Guide 📖
 
-### Send a Chat Completion Request
+### Send Chat Completion Request
 
 Send a POST request to the `/v1/chat/completions` endpoint:
 
 ```json
 {
-    "model": "parallel",  // Optional, defaults to the default combination
+    "model": "parallel",  // Optional, uses default combination if not specified
     "messages": [
         {"role": "user", "content": "Your question"}
     ],
@@ -122,7 +175,7 @@ Send a POST request to the `/v1/chat/completions` endpoint:
             "content": [
                 {
                     "type": "text",
-                    "text": "What is in this image?"
+                    "text": "What's in this image?"
                 },
                 {
                     "type": "image_url",
@@ -138,37 +191,37 @@ Send a POST request to the `/v1/chat/completions` endpoint:
 }
 ```
 
-## Preset Combination Descriptions 📋
+## Preset Combinations 📋
 
-### parallel Combination
-- Invokes multiple models in parallel
-- Integrates results comprehensively
+### Parallel Combination
+- Parallel calls to multiple models
+- Comprehensive result analysis
 - Suitable for scenarios requiring comprehensive answers
 
-### direct Combination
-- Intelligent combination mode:
-  - Text requests: Use high-performance large language models (e.g., Qwen2.5-72B-Instruct)
-  - Visual requests: Automatically switch to visual models (e.g., Qwen2-VL-7B-Instruct)
+### Direct Combination
+- Smart combination mode:
+  - Text requests: Uses high-performance LLM (e.g., Qwen2.5-72B-Instruct)
+  - Visual requests: Automatically switches to vision model (e.g., Qwen2-VL-7B-Instruct)
 - Features:
   - Single model processing, fast response
   - Intelligent request type recognition
-  - Achieves high-performance multimodal capability through combination
-- Use Cases:
-  - Daily conversations and inquiries
+  - High-performance multimodal capabilities through combination
+- Use cases:
+  - Daily conversations and consultations
   - Image analysis and understanding
   - Business scenarios requiring quick responses
 
 ### Combination Mode Comparison
 
-| Feature | parallel Mode | direct Mode |
-|---------|---------------|-------------|
-| Processing Method | Multi-model parallel | Single model intelligent switch |
+| Feature | Parallel Mode | Direct Mode |
+|---------|--------------|-------------|
+| Processing Method | Multiple Models in Parallel | Single Model Smart Switch |
 | Response Speed | Slower | Fast |
-| Answer Quality | Comprehensive, multi-angle | Precise, concise |
+| Answer Quality | Comprehensive, Multi-perspective | Precise, Concise |
 | Resource Consumption | Higher | Low |
-| Suitable Scenarios | Requires deep analysis | Daily conversations and image analysis |
+| Suitable Scenarios | Deep Analysis Required | Daily Chat and Image Analysis |
 
-### direct Mode Example
+### Direct Mode Examples
 
 #### Text Request
 ```json
@@ -191,7 +244,7 @@ Send a POST request to the `/v1/chat/completions` endpoint:
             "content": [
                 {
                     "type": "text",
-                    "text": "What is in this image?"
+                    "text": "What's in this image?"
                 },
                 {
                     "type": "image_url",
@@ -210,7 +263,7 @@ Send a POST request to the `/v1/chat/completions` endpoint:
 ## Error Handling 🚨
 
 - **401 Unauthorized**: Invalid Bearer Token
-- **500 Internal Server Error**: Internal server error
+- **500 Internal Server Error**: Server Internal Error
 
 ## License 📄
 
