@@ -6,6 +6,7 @@ import time
 import queue
 import yaml
 from typing import Dict, List, Tuple, Optional, Union
+import flask
 
 app = Flask(__name__)
 
@@ -360,6 +361,14 @@ def handle_normal_request(messages: List[Dict], models: List[Dict], summary_mode
         error_msg = f"Summary generation failed: {str(e)}"
         debug_print("Error", {"error": error_msg})
         return {"error": error_msg}, 500
+
+# 添加新的路由处理器，放在 chat_completions 路由之后
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    """处理所有非 /v1/chat/completions 的请求并重定向"""
+    if path != 'v1/chat/completions':
+        return flask.redirect('https://github.com/leezhuuuuu/N-1')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=18888)
