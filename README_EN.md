@@ -1,4 +1,4 @@
-# N-1: Multi-Model Chat Completion API 🚀
+# N-1: Multi-Model Combination Chat Completion API 🚀
 
 [English](README_EN.md) | [中文](README.md)
 
@@ -8,28 +8,42 @@
 
 ## Overview 🌟
 
-N-1 is a Flask-based web application that provides a powerful API for handling chat completion requests. The project's uniqueness lies in its ability to query multiple language models in parallel and then synthesize these responses using a summary model, providing comprehensive and accurate answers. This innovative approach makes N-1 an ideal tool for AI developers and researchers, particularly suitable for scenarios requiring the synthesis of multiple model perspectives.
+N-1 is a Flask-based web application that provides a powerful API for handling chat completion requests. The project supports multiple combination modes, allowing you to choose between parallel analysis or direct processing based on your needs. In parallel mode, the system can query multiple large language models simultaneously and use a dedicated summary model to synthesize these responses, providing comprehensive and accurate answers. The project supports both text and visual multimodal processing, making it an ideal tool for AI developers and researchers.
 
 ## Tech Stack 🛠️
 
 - **Backend Framework**: Flask (Python)
-- **Concurrent Processing**: threading
+- **Concurrent Processing**: threading, queue
 - **External Requests**: requests
 - **Configuration Management**: YAML
 - **Streaming Output**: Server-Sent Events (SSE)
 
 ## Features 🌈
 
-- **Multi-Model Parallel Querying**: Simultaneously send requests to multiple language models, improving efficiency and diversity.
-- **Summary Model Integration**: Use a dedicated summary model to synthesize responses from multiple models.
-- **Streaming and Non-Streaming Output**: Support for both output modes to meet different needs.
-- **Configurable Model Parameters**: Easily manage parameters for multiple models through a YAML configuration file.
-- **Bearer Token Authentication**: Ensure secure API access.
-- **Error Retry Mechanism**: Improve system stability and reliability.
-- **Timeout Control**: Prevent long-running requests from affecting system performance.
-- **Streaming Status Feedback**: Real-time feedback on the response status of each model.
+- **Combination Configuration**
+  - Supports multiple preset combination modes
+  - Each combination can independently configure all parameters
+  - Flexible switching of processing modes
+  
+- **Multi-Model Parallel Analysis**
+  - Simultaneously invoke multiple language models
+  - Supports text and visual processing
+  - Professional summary model to integrate results
 
-## Environment Requirements 🖥️
+- **Visual Processing Capability**
+  - Supports image URLs and base64 formats
+  - Dedicated visual model processing
+  - Configurable image detail levels
+
+- **System Functions**
+  - Streaming and non-streaming output
+  - Bearer Token authentication
+  - Error retry mechanism
+  - Timeout control
+  - Real-time status feedback
+  - Debug mode support
+
+## Environment 🖥️
 
 - Python 3.7+
 
@@ -50,25 +64,27 @@ pip install flask requests pyyaml
 
 ### 3. Configuration File
 
-Edit the `config.yaml` file to configure your model parameters and API token. Example configuration:
+Edit the `config.yaml` file to configure your combination parameters. Example configuration:
 
 ```yaml
-api_bearer_token: YOUR_API_BEARER_TOKEN
-models:
-  - endpoint: https://api.example.com/v1/chat/completions
-    bearer_token: MODEL_BEARER_TOKEN
-    model_name: ExampleModel
-    temperature: 0.7
-    max_retries: 3
-    timeout: 150
-summary_model:
-  endpoint: https://api.example.com/v1/chat/completions
-  bearer_token: SUMMARY_MODEL_BEARER_TOKEN
-  model_name: SummaryModel
-  temperature: 0.1
-  summary_prompt: "Your summary prompt here"
-  timeout: 150
-stream_status_feedback: true
+# Global default configuration
+default_combination: "parallel"  # Default combination name
+
+# Model combination configuration
+combinations:
+  - name: "parallel"  # Parallel analysis combination
+    api_bearer_token: YOUR_API_BEARER_TOKEN
+    stream_status_feedback: true
+    use_parallel_analysis: true
+    debug_mode: true
+    text_models:
+      - endpoint: https://api.example.com/v1/chat/completions
+        bearer_token: MODEL_BEARER_TOKEN
+        model_name: ExampleModel
+        temperature: 0.7
+        max_retries: 3
+        timeout: 150
+    # ... other configurations
 ```
 
 ### 4. Start the Project
@@ -77,16 +93,17 @@ stream_status_feedback: true
 python app.py
 ```
 
-The service will start on `http://0.0.0.0:18888`.
+The service will start at `http://0.0.0.0:18888`.
 
 ## Usage Guide 📖
 
-### Sending Chat Completion Requests
+### Send a Chat Completion Request
 
-Send a POST request to the `/v1/chat/completions` endpoint with the following JSON data:
+Send a POST request to the `/v1/chat/completions` endpoint:
 
 ```json
 {
+    "model": "parallel",  // Optional, defaults to the default combination
     "messages": [
         {"role": "user", "content": "Your question"}
     ],
@@ -94,51 +111,112 @@ Send a POST request to the `/v1/chat/completions` endpoint with the following JS
 }
 ```
 
-Make sure to include the correct Bearer Token in the request header.
-
-## API Endpoint 🌐
-
-### `POST /v1/chat/completions`
-
-Handles chat completion requests.
-
-#### Request Headers
-
-```
-Authorization: Bearer YOUR_API_TOKEN
-Content-Type: application/json
-```
-
-#### Request Body
+### Visual Request Example
 
 ```json
 {
+    "model": "parallel",
     "messages": [
-        {"role": "user", "content": "What is the capital of France?"}
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "What is in this image?"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/image.jpg",
+                        "detail": "auto"
+                    }
+                }
+            ]
+        }
     ],
-    "stream": false
+    "stream": true
 }
 ```
 
-#### Response
+## Preset Combination Descriptions 📋
 
-For non-streaming requests, returns a JSON format response.
-For streaming requests, returns data in SSE format.
+### parallel Combination
+- Invokes multiple models in parallel
+- Integrates results comprehensively
+- Suitable for scenarios requiring comprehensive answers
+
+### direct Combination
+- Intelligent combination mode:
+  - Text requests: Use high-performance large language models (e.g., Qwen2.5-72B-Instruct)
+  - Visual requests: Automatically switch to visual models (e.g., Qwen2-VL-7B-Instruct)
+- Features:
+  - Single model processing, fast response
+  - Intelligent request type recognition
+  - Achieves high-performance multimodal capability through combination
+- Use Cases:
+  - Daily conversations and inquiries
+  - Image analysis and understanding
+  - Business scenarios requiring quick responses
+
+### Combination Mode Comparison
+
+| Feature | parallel Mode | direct Mode |
+|---------|---------------|-------------|
+| Processing Method | Multi-model parallel | Single model intelligent switch |
+| Response Speed | Slower | Fast |
+| Answer Quality | Comprehensive, multi-angle | Precise, concise |
+| Resource Consumption | Higher | Low |
+| Suitable Scenarios | Requires deep analysis | Daily conversations and image analysis |
+
+### direct Mode Example
+
+#### Text Request
+```json
+{
+    "model": "direct",
+    "messages": [
+        {"role": "user", "content": "What is quantum computing?"}
+    ],
+    "stream": true
+}
+```
+
+#### Visual Request
+```json
+{
+    "model": "direct",
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "What is in this image?"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/image.jpg",
+                        "detail": "auto"
+                    }
+                }
+            ]
+        }
+    ],
+    "stream": true
+}
+```
 
 ## Error Handling 🚨
 
-- **401 Unauthorized**: Invalid Bearer Token.
-- **500 Internal Server Error**: Server internal error.
-
-## Concurrency Management 🔄
-
-The application uses a thread pool to handle multiple concurrent requests, ensuring efficient performance.
+- **401 Unauthorized**: Invalid Bearer Token
+- **500 Internal Server Error**: Internal server error
 
 ## License 📄
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
 
-## Contributions 🤝
+## Contributing 🤝
 
 Contributions are welcome! Please submit issues or pull requests.
 
@@ -146,7 +224,7 @@ Contributions are welcome! Please submit issues or pull requests.
 
 - leezhuuuuu
 
-## Acknowledgements 🙏
+## Acknowledgments 🙏
 
 - Flask
 - Requests
