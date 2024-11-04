@@ -245,7 +245,8 @@ def chat_completions():
     if token != api_token:
         return jsonify({"error": "无效的 bearer token"}), 401
 
-    if not models:
+    # 修改这里：只在并行模式下检查models
+    if use_parallel and not models:
         return jsonify({"error": "No available models for this request type"}), 400
 
     if stream:

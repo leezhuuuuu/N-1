@@ -68,20 +68,6 @@ combinations:
     stream_status_feedback: true
     use_parallel_analysis: false
     debug_mode: true
-    text_models:
-      - endpoint: YOUR_API_ENDPOINT
-        bearer_token: YOUR_MODEL_TOKEN
-        model_name: direct-model
-        temperature: 0.1
-        max_retries: 3
-        timeout: 150
-    vision_models:
-      - endpoint: YOUR_API_ENDPOINT
-        bearer_token: YOUR_MODEL_TOKEN
-        model_name: direct-vision-model
-        temperature: 0.1
-        max_retries: 3
-        timeout: 150
     text_summary_model:
       endpoint: YOUR_API_ENDPOINT
       bearer_token: YOUR_MODEL_TOKEN
