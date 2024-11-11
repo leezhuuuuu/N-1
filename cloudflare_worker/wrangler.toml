@@ -1,0 +1,17 @@
+name = "n-1-worker"
+type = "javascript"
+account_id = "YOUR_ACCOUNT_ID"
+workers_dev = true
+compatibility_date = "2024-01-01"
+
+[build]
+command = ""
+[build.upload]
+format = "service-worker"
+
+[env.production]
+route = "YOUR_DOMAIN/v1/chat/*"
+zone_id = "YOUR_ZONE_ID"
+
+[triggers]
+crons = []
