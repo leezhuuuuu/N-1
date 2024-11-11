@@ -1,6 +1,6 @@
 # N-1: Multi-Model Composite Chat Completion API 🚀
 
-[中文](README.md) | [English](README_EN.md) | [Go](go/README.md) | [JavaScript](js/README.md) | [CF_worker](cloudfare_worker\README.md)
+[中文](README.md) | [English](README_EN.md) | [Go](go/README.md) | [JavaScript](js/README.md) | [CF_worker](cloudfare_worker/README.md)
 
 [![](https://img.shields.io/github/license/leezhuuuuu/N-1.svg)](LICENSE)
 ![](https://img.shields.io/github/stars/leezhuuuuu/N-1.svg)
